@@ -1,0 +1,65 @@
+Backend:
+    Model Layer:
+    - USER 
+        username
+        email
+        password
+        profile : {
+            firstName
+            lastName
+            bio
+            avatar
+        }
+        posts : []
+        followers 
+        followings
+        followerCount
+        followingCount
+        createdAt
+
+    - Post:
+        media
+        caption
+        likeCount
+        Comments : []
+        isDeleted : 
+        createdAt
+
+
+
+
+
+Frontend:
+    UI:
+    - login / register
+    - feed page
+    - profile page
+        - self 
+        - other
+    - create Post page
+
+
+api : 
+    auth
+        - login
+        - resgiter
+    user
+        - get user profile
+        - get user profile by ID 
+        - update profile / Edit profil 
+        - follow user with user ID
+        - unFollow user with user ID
+    Post
+        - create new posts
+        - get post feed
+        - get post with ID
+        - delete post
+        - update post
+    Likes
+        - like posts with ID
+        - unlike posts with ID
+    Comments
+        - add Comments
+        - get all comments on a post
+
+
