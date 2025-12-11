@@ -1,20 +1,15 @@
 import { Router } from 'express';
+import { login, register } from '../controller/authController.js';
+import { protect } from '../middleware/authMiddleware.js';
+
 const router = Router();
 
-// POST /login
-router.post('/login', (req, res) => {
-  // TODO: Implement login logic
-  const { username, password } = req.body;
-  // Dummy response for now
-  res.json({ message: 'Login endpoint', username });
-});
+router.post('/login', login);
+router.post('/register', register);
 
-// POST /register
-router.post('/register', (req, res) => {
-  // TODO: Implement registration logic
-  const { username, password, email } = req.body;
-  // Dummy response for now
-  res.json({ message: 'Register endpoint', username, email });
+// Example protected route
+router.get('/protected', protect, (req, res) => {
+  res.json({ message: 'This is a protected route', user: req.user });
 });
 
 export default router;
