@@ -3,7 +3,8 @@ import {
   getUserProfile,
   updateUserProfile,
   followUser,
-  unfollowUser
+  unfollowUser,
+  getUserPosts
 } from '../controller/userController.js';
 
 const router = express.Router();
@@ -11,7 +12,8 @@ const router = express.Router();
 
 router.get('/', getUserProfile);
 router.put('/', updateUserProfile);
-router.post('/:id/follow', followUser);
-router.post('/:id/unfollow', unfollowUser);
+router.post('/follow', followUser);
+router.post('/unfollow', unfollowUser);
+router.get('/posts' , getUserPosts);
 
 export default router;

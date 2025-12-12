@@ -1,8 +1,11 @@
 import express from 'express';
 import authRouter from './routes/auth.js';
 import userRouter from './routes/userRoutes.js';
+import postRouter from './routes/postRoutes.js';
+import commentRouter from './routes/commentRoutes.js';
 import connectDB from './config/db.js';
 import dotenv from 'dotenv';
+
 
 dotenv.config();
 
@@ -22,6 +25,10 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRouter);
 // User routes
 app.use('/api/users', userRouter);
+// Post routes
+app.use('/api/posts', postRouter);
+// Comment routes
+app.use('/api/comments', commentRouter);
 
 //route not found middleware
 app.use((req, res, next) => {

@@ -8,13 +8,14 @@ import {
   getAllPosts
 } from '../controller/postController.js';
 
-const router = express.Router();
+const postRouter = express.Router();
 
-router.post('/', createPost);
-router.get('/', getAllPosts);
-router.get('/:id', getPostById);
-router.put('/:id', updatePost);
-router.delete('/:id', deletePost);
-router.post('/:id/like', likePost);
+postRouter.post('/', createPost);
+postRouter.get('/', getAllPosts);
+postRouter.get('/:id', getPostById);
+postRouter.put('/:id', updatePost);
+postRouter.delete('/:id', deletePost);
+postRouter.post('/like/:id', likePost);
 
-export default router;
+
+export default postRouter;

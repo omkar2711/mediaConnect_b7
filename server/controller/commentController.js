@@ -1,13 +1,21 @@
+import { getUserIdFromHeader } from '../helper/getUserId.js';
 import Comment from '../model/commentModel.js';
 import Post from '../model/PostModel.js';
 
 // Add a comment to a post
 export const addComment = async (req, res) => {
   try {
-    const { user, text } = req.body;
+    const user = getUserIdFromHeader(req);
+    const { text } = req.body;
     const postId = req.params.postId;
+    if (!postId) {
+      return res.status(400).json({ message: 'Post ID is required' });
+    }
     const comment = new Comment({ user, text });
     await comment.save();
+    if(!await Post.findById(postId)){
+        return res.status(404).json({ message: 'Post not found' });
+    }
     await Post.findByIdAndUpdate(postId, { $push: { comments: comment } });
     res.status(201).json(comment);
   } catch (err) {
