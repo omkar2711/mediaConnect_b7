@@ -1,6 +1,6 @@
 import { getUserIdFromHeader } from '../helper/getUserId.js';
 import Comment from '../model/commentModel.js';
-import Post from '../model/PostModel.js';
+import Post from '../model/postModel.js';
 
 // Add a comment to a post
 export const addComment = async (req, res) => {
