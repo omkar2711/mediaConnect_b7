@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import authRouter from './routes/auth.js';
 import userRouter from './routes/userRoutes.js';
 import postRouter from './routes/postRoutes.js';
@@ -15,6 +16,7 @@ const port = process.env.PORT || 3000;
 // Connect to MongoDB
 connectDB();
 
+app.use(cors()); // allow all origins for now; tighten later if needed
 app.use(express.json());
 
 app.get('/', (req, res) => {
