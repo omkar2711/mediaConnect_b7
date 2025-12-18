@@ -4,12 +4,14 @@ import {
   updateUserProfile,
   followUser,
   unfollowUser,
-  getUserPosts
+  getUserPosts,
+  getSuggestedUsers
 } from '../controller/userController.js';
 
 const router = express.Router();
 
 
+router.get('/suggestions', getSuggestedUsers);
 router.get('/', getUserProfile);
 router.put('/', updateUserProfile);
 router.post('/follow', followUser);

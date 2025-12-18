@@ -63,6 +63,13 @@ export const getUserById = async (userId) => {
   return handleResponse(res)
 }
 
+export const getSuggestedUsers = async (limit = 6) => {
+  const res = await fetch(`${API_URL}/users/suggestions?limit=${limit}`, {
+    headers: defaultHeaders(),
+  })
+  return handleResponse(res)
+}
+
 // Posts
 export const getAllPosts = async () => {
   const res = await fetch(`${API_URL}/posts`, { headers: defaultHeaders() })
@@ -92,6 +99,25 @@ export const addComment = async (postId, payload) => {
     method: 'POST',
     headers: defaultHeaders(),
     body: JSON.stringify(payload),
+  })
+  return handleResponse(res)
+}
+
+// Follow/Unfollow
+export const followUser = async (followerId) => {
+  const res = await fetch(`${API_URL}/users/follow`, {
+    method: 'POST',
+    headers: defaultHeaders(),
+    body: JSON.stringify({ followerId }),
+  })
+  return handleResponse(res)
+}
+
+export const unfollowUser = async (followerId) => {
+  const res = await fetch(`${API_URL}/users/unfollow`, {
+    method: 'POST',
+    headers: defaultHeaders(),
+    body: JSON.stringify({ followerId }),
   })
   return handleResponse(res)
 }

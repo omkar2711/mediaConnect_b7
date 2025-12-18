@@ -3,16 +3,12 @@ import { getProfile, getUserPosts } from '../api/api'
 
 const fallbackProfile = {
   username: 'mediaconnect',
-  email: 'you@mediaconnect.app',
   profile: {
-    firstName: 'Media',
-    lastName: 'Creator',
-    bio: 'Crafting stories with pixels and people.',
     avatar:
       'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
   },
-  followerCount: 2840,
-  followingCount: 312,
+  followerCount: 0,
+  followingCount: 0,
 }
 
 function UserProfile() {
@@ -44,58 +40,66 @@ function UserProfile() {
 
   const user = useMemo(() => profile || fallbackProfile, [profile])
 
+  const avatar =
+    user?.profile?.avatar || fallbackProfile.profile.avatar
+
+  const formattedPosts = useMemo(() => {
+    if (!Array.isArray(posts) || !posts.length) return []
+    return posts.map((post, idx) => {
+      const media = Array.isArray(post.media) && post.media.length ? post.media[0] : null
+      return {
+        id: post._id || post.id || idx,
+        media,
+        likeCount: post.likeCount ?? 0,
+        commentCount: Array.isArray(post.comments) ? post.comments.length : 0,
+      }
+    })
+  }, [posts])
+
   return (
-    <div className="profile-page">
-      {status === 'loading' && <div className="status-chip">Loading your profile…</div>}
-      {error && <div className="status-chip error">{error}</div>}
+    <div className="ig-profile-page">
+      {status === 'loading' && <div className="ig-loading">Loading profile…</div>}
+      {error && <div className="ig-error">{error}</div>}
 
-      <div className="profile-hero">
-        <div className="avatar xl">
-          <img src={user?.profile?.avatar} alt={user?.username} />
+      <header className="ig-profile-header">
+        <div className="ig-profile-avatar">
+          <img src={avatar} alt={user?.username} />
         </div>
-        <div className="profile-meta">
-          <div className="row">
-            <h2>{user?.username}</h2>
-            <button className="ghost small">Edit profile</button>
-            <button className="primary">Share</button>
+        <div className="ig-profile-info">
+          <div className="ig-profile-username-row">
+            <h1>{user?.username}</h1>
+            <button className="ig-edit-btn">Edit profile</button>
           </div>
-          <div className="counts">
-            <span>
-              <strong>{posts.length || 0}</strong> posts
-            </span>
-            <span>
-              <strong>{user?.followerCount ?? 0}</strong> followers
-            </span>
-            <span>
-              <strong>{user?.followingCount ?? 0}</strong> following
-            </span>
-          </div>
-          <div className="identity">
-            <p className="name">
-              {user?.profile?.firstName} {user?.profile?.lastName}
-            </p>
-            <p className="muted">{user?.email}</p>
-            <p className="bio">{user?.profile?.bio}</p>
+          <div className="ig-profile-stats">
+            <span><strong>{formattedPosts.length}</strong> posts</span>
+            <span><strong>{user?.followerCount ?? 0}</strong> followers</span>
+            <span><strong>{user?.followingCount ?? 0}</strong> following</span>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="profile-content">
-        <h3>My Posts</h3>
-        {posts.length ? (
-          <div className="media-grid">
-            {posts.map((post) => (
-              <div key={post._id} className="media-tile">
-                {Array.isArray(post.media) && post.media[0] ? (
-                  <img src={post.media[0]} alt={post.caption || 'Post'} />
+      <div className="ig-profile-posts">
+        {formattedPosts.length > 0 ? (
+          <div className="ig-profile-grid">
+            {formattedPosts.map((post) => (
+              <div key={post.id} className="ig-profile-post">
+                {post.media ? (
+                  <img src={post.media} alt="Post" />
                 ) : (
-                  <div className="placeholder">No media</div>
+                  <div className="ig-profile-post-placeholder">No media</div>
                 )}
+                <div className="ig-profile-post-overlay">
+                  <span>❤️ {post.likeCount}</span>
+                  <span>💬 {post.commentCount}</span>
+                </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="empty">No posts yet. Share something new!</div>
+          <div className="ig-profile-empty">
+            <span className="ig-profile-empty-icon">📷</span>
+            <h3>No Posts Yet</h3>
+          </div>
         )}
       </div>
     </div>
@@ -103,4 +107,3 @@ function UserProfile() {
 }
 
 export default UserProfile
-

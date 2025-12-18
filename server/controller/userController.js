@@ -100,6 +100,38 @@ export const unfollowUser = async (req, res) => {
 };
 
 
+// Suggested users
+export const getSuggestedUsers = async (req, res) => {
+	try {
+		const userId = getUserIdFromHeader(req);
+		if (!userId) {
+			return res.status(401).json({ message: 'No token, authorization denied' });
+		}
+
+		const limit = Number.parseInt(req.query.limit, 10) || 6;
+		const currentUser = await User.findById(userId).select('followings');
+		if (!currentUser) {
+			return res.status(404).json({ message: 'User not found' });
+		}
+
+		const followingIds = Array.isArray(currentUser.followings)
+			? currentUser.followings.map((id) => id.toString())
+			: [];
+		const excludeIds = [userId, ...followingIds];
+
+		const suggestions = await User.find({ _id: { $nin: excludeIds } })
+			.select('username profile followerCount followingCount')
+			.sort({ followerCount: -1, createdAt: -1 })
+			.limit(limit)
+			.lean();
+
+		res.json(suggestions);
+	} catch (err) {
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+};
+
+
 
 // Get all posts of the authenticated user
 export const getUserPosts = async (req, res) => {
